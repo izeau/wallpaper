@@ -15,6 +15,8 @@ const WIDTH   = 2560;
 const HEIGHT  = 1600;
 const PICTURE = resolve(__dirname, 'pictures', String(Date.now()));
 
+process.on('uncaughtException', console.error);
+
 get(SOURCE, res => {
   let json = '';
 
@@ -41,7 +43,8 @@ function handlePosts(posts = []) {
     return true;
   });
 
-  const url = idx('data.preview.images.0.source.url', post);
+  const url = idx('data.preview.images.0.source.url', post)
+    .replace('&amp;', '&');
 
   get(url, res => {
     res
@@ -51,6 +54,7 @@ function handlePosts(posts = []) {
 }
 
 function setBackground() {
+  console.log(PICTURE);
   jxa(`
     const SystemEvents = Application('System Events');
 
